@@ -1,5 +1,15 @@
 <html>
-    <head></head>
+    <head>
+        <style>
+            body {
+                margin: 0;
+                font-family: Optimo-Plain,Helvetica Neue,Helvetica,Arial,sans-serif;
+            }
+        </style>
+        <script>
+            delete Document.prototype.adoptedStyleSheets;
+        </script>
+    </head>
     <body>
         <poc-app></poc-app>
         <script src="build/app.js"></script>

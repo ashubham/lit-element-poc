@@ -1,0 +1,3 @@
+import {css} from 'lit-element';
+
+export const styles = css`:host{background-color:#fff;border-radius:2px;display:flex}.header{font-size:20px;font-weight:700;padding:25px;border-bottom:1px solid #dbdfe7}.choose-sources{display:flex;align-items:center;justify-content:center;border-bottom:1px solid #dbdfe7;padding:20px}.column-list{padding:10px 0;overflow:scroll;flex:1 1 0}bk-label{cursor:pointer;display:block;padding:2px 10px}bk-label:hover{background-color:#ebebeb}`;

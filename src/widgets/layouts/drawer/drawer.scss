@@ -1,0 +1,37 @@
+:host {
+    display: flex;
+    position: relative;
+    z-index: 0;
+    align-items: stretch;
+}
+
+slot[name="drawer"] {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    flex: 0 0 0;
+    overflow: hidden;
+    box-shadow: 0 2px 4px -2px rgba(28,35,48,.04), 0 2px 4px 0 rgba(28,35,48,.04);
+    border-radius: 2px;
+    margin: 0 20px 0 0;
+}
+
+slot[name="drawer"][position=right] {
+    order: 2;
+    margin: 0 0 0 20px;
+}
+
+@media (min-width: 768px) {
+    slot[name="drawer"] {
+        flex: 0 0 256px;
+    }
+}
+
+.content-container {
+    /* Create a stacking context here so that all children appear below the header. */
+    position: relative;
+    z-index: 0;
+    height: 100%;
+    flex: 1 1 auto;
+    transition: var(--app-drawer-layout-content-transition, none);
+}

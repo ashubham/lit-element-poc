@@ -1,0 +1,3 @@
+import {css} from 'lit-element';
+
+export const styles = css`:host{display:flex}bk-drawer-layout{display:flex;flex:1 1 0}bk-left-panel{width:100%}bk-search-bar{display:block;box-shadow:0 2px 4px -2px rgba(28,35,48,.04),0 2px 4px 0 rgba(28,35,48,.04)}`;
