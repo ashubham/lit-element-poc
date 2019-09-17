@@ -14,6 +14,7 @@ import {
     StoreEnhancer
   } from 'redux';
   import thunk, { ThunkMiddleware } from 'redux-thunk';
+  import logger from 'redux-logger';
   import { lazyReducerEnhancer } from 'pwa-helpers/lazy-reducer-enhancer.js';
 
 
@@ -33,5 +34,5 @@ export const store = createStore(
     state => state as Reducer,
     devCompose(
         lazyReducerEnhancer(combineReducers),
-        applyMiddleware(thunk as ThunkMiddleware<RootState, RootAction>))
+        applyMiddleware(thunk as ThunkMiddleware<RootState, RootAction>, logger))
 )

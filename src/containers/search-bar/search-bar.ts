@@ -2,13 +2,15 @@ import { ConnectedComponent } from '../../base/base-types/connected-component';
 import { Component } from '../../base/decorators';
 
 import {styles} from './search-bar-css';
-import { html, query } from 'lit-element';
+import { html, query, property } from 'lit-element';
 import {Tokenizer} from 'tokenizer.js';
 
 import '../../widgets/layouts/horizontal/horizontal';
 import '@material/mwc-icon/mwc-icon-font';
 import '@material/mwc-icon-button';
 import '@material/mwc-icon';
+import { Phrase } from '../../services/auto-complete-service';
+import { updateSearchText } from '../../modules/sage/sage-actions';
 
 @Component({
     name: 'bk-search-bar',
@@ -16,49 +18,50 @@ import '@material/mwc-icon';
 })
 export class SearchBarComponent extends ConnectedComponent {
     @query('#input') input!: HTMLDivElement;
+    @property({attribute: false}) phrases!: string[];
+    private tokenizer!: Tokenizer;
+
     constructor() {
         super();
     }
 
     render() {
+        this.tokenizer && this.tokenizer.updateDisplay(this.tokenize(this.phrases));
         return html`
             <link href="https://unpkg.com/tokenizer.js@1.2.7/dist/tokenizer.css" rel="stylesheet">
             <bk-horizontal>
                 <mwc-icon>search</mwc-icon>
                 <div id="input" contenteditable="true"></div>
-                <mwc-icon-button icon="clear"></mwc-icon-button>
+                <mwc-icon-button icon="clear"
+                    @click=${() => this.tokenizer.clear()}></mwc-icon-button>
             </bk-horizontal>
         `;
     }
 
     firstUpdated() {
-        let tokenizer = new Tokenizer(this.input, {
+        this.tokenizer = new Tokenizer(this.input, {
             onChange: this.asyncTokenizePeriods,
 		    onCaretPositionChanged: () => {},
-		    initialInput: this.tokenizePeriods("I am complete. I am too. I am not")
+		    initialInput: this.tokenize(this.phrases)
         })
     }
 
+    stateChanged(state) {
+        this.phrases = state.sage.phrases;
+    }
+
     private asyncTokenizePeriods = (str: string, caretPosition) => {
-        let tokenized = this.tokenizePeriods(str, caretPosition);
-        return new Promise(resolve => {
-            setTimeout(() => resolve(tokenized), 50);
-        });
+        // UPDATE_SAGE_MODEL Action.
+        this.dispatch(updateSearchText(str, caretPosition));
     }
     
-    private tokenizePeriods(str: string, caretPosition) {
-        return str
-            .replace(/\./g, '.#!')
-            .split('#!')
-            .filter(token => token !== "")
-            .map(token => token.trimLeft())
-            .map((token) => {
-                console.log(token);
-                let isComplete = token[token.length - 1] === '.';
+    private tokenize(phrases: Phrase[]) {
+        return phrases
+            .map((phrase) => {
                 return {
-                    value: token,
-                    className: (isComplete) ? 'token-type-a': 'incomplete-token',
-                    isIncomplete: !isComplete,
+                    value: phrase.text,
+                    className: (phrase.isComplete) ? 'token-type-a': 'incomplete-token',
+                    isIncomplete: !phrase.isComplete,
                     isExtensible: false
                 };
             });

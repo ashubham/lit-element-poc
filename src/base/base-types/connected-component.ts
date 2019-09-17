@@ -6,4 +6,8 @@ export class ConnectedComponent extends connect(store)(LitElement) {
     constructor() {
         super();
     }
+
+    protected dispatch(action) {
+        store.dispatch(action);
+    }
 }

@@ -3,14 +3,24 @@ import { Component } from '../../base/decorators';
 
 import {styles} from './left-panel-css';
 import { html, property } from 'lit-element';
-import {repeat} from 'lit-html/directives/repeat';
 import _ from 'lodash';
 
 import '@material/mwc-button';
 import '@material/mwc-textfield';
 import '../../widgets/label/label';
 import { LabelComponent } from '../../widgets/label/label';
- 
+
+import {sage} from '../../modules/sage/sage-reducers';
+import {sourceColumns} from '../../modules/misc/reducers';
+import { addColumns } from '../../modules/sage/sage-actions';
+import {store} from '../../base/store';
+import { getColumns } from '../../modules/misc/actions';
+
+store.addReducers({
+    sage,
+    sourceColumns
+});
+
 /**
  * @element bk-left-panel
  */
@@ -19,8 +29,8 @@ import { LabelComponent } from '../../widgets/label/label';
     styles
 })
 export class LeftPanelComponent extends ConnectedComponent {
-    //@property({attribute: false}) columns: any[] = [];
-    private filteredColumns = columns;
+    @property({attribute: false}) columns: any[] = [];
+    private filteredColumns = this.columns;
 
     constructor() {
         super();
@@ -43,7 +53,8 @@ export class LeftPanelComponent extends ConnectedComponent {
                      @dblclick=${this.addColumn}>
                     ${this.filteredColumns.map(c => html`
                         <bk-label 
-                            text=${c.name} 
+                            text=${c.name}
+                            id=${c.id} 
                             trailingIcon="filter_list"></bk-label>
                     `)}
                 </div>
@@ -54,6 +65,10 @@ export class LeftPanelComponent extends ConnectedComponent {
     private addColumn(e) {
         let targetCol: any = e.target;
         console.log(targetCol);
+        this.dispatch(addColumns([{
+            name: targetCol.text,
+            id: targetCol.id
+        }]));
     }
 
     private onFilterUpdate(e: InputEvent) {
@@ -64,21 +79,18 @@ export class LeftPanelComponent extends ConnectedComponent {
 
     private filterList = _.debounce((filter: string) => {
         filter = filter.toLowerCase();
-        this.filteredColumns = columns.filter(c => {
+        this.filteredColumns = this.columns.filter(c => {
             return c.name.toLowerCase().includes(filter);
         });
         this.requestUpdate();
     }, 100);
 
-    stateChanged(state: any) {
-        //this.columns = state.leftPanel.columns;
+    firstUpdated() {
+        this.dispatch(getColumns());
     }
-}
 
-let columns: any[] = [];
-for(let i = 0;i<1000;i++) {
-    columns.push({
-        name: `Amount ${i}`,
-        id: _.uniqueId()
-    });
+    stateChanged(state: any) {
+        this.columns = state.sourceColumns.columns;
+        this.filteredColumns = this.columns;
+    }
 }

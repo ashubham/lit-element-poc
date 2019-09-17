@@ -1,8 +1,8 @@
 
 import { html, css, property, PropertyValues } from 'lit-element';
 import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
-import { ConnectedComponent } from '../base-types/connected-component';
-import { Component } from '../decorators';
+import { ConnectedComponent } from '../../base/base-types/connected-component';
+import { Component } from '../../base/decorators';
 import {styles} from './app-css';
 
 import '@material/mwc-top-app-bar-fixed';

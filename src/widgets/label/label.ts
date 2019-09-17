@@ -18,8 +18,9 @@ export class LabelComponent extends BaseComponent {
     @property({type: String}) text: string = '';
     @property({type: String}) leadingIcon: string = '';
     @property({type: String}) trailingIcon: string = '';
+    @property({type: String}) id: string = '';
     @action<void>({}) leadingIconClick!: () => {};
-    
+
     constructor() {
         super();
     }
