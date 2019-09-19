@@ -45,6 +45,7 @@ export class LeftPanelComponent extends ConnectedComponent {
                 </div>
                 <mwc-textfield label="Search columns"
                     dense
+                    id="search"
                     icon="search"
                     iconTrailing="clear"
                     @input=${this.onFilterUpdate}></mwc-textfield>
@@ -87,6 +88,11 @@ export class LeftPanelComponent extends ConnectedComponent {
 
     firstUpdated() {
         this.dispatch(getColumns());
+    }
+
+    async performUpdate() {
+        await new Promise((resolve) => setTimeout(resolve));
+        super.performUpdate();
     }
 
     stateChanged(state: any) {

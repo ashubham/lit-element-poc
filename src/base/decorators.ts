@@ -16,7 +16,6 @@ export interface ActionDescriptor {
 }
 export function action<T>(descriptor: ActionDescriptor) {
     return (component: LitElement, name: PropertyKey) => {
-        console.log(component, name);
         component[name] = function(detailOrEvent?: T | Event) {
             let eventToDispatch;
             if(detailOrEvent instanceof Event) {

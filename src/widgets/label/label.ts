@@ -29,7 +29,10 @@ export class LabelComponent extends BaseComponent {
         return html`
             <bk-horizontal>
                 ${this.leadingIcon 
-                    ? html`<mwc-icon class="leading">${this.leadingIcon}</mwc-icon>` : ''}
+                    ? html`<mwc-icon
+                        id="leading" 
+                        class="leading"
+                        @click=${this.leadingIconClick}>${this.leadingIcon}</mwc-icon>` : ''}
                 <div class="text">${this.text}</div>
                 ${this.trailingIcon 
                     ? html`<mwc-icon 
@@ -38,13 +41,5 @@ export class LabelComponent extends BaseComponent {
                     : ''}
             </bk-horizontal>
         `;
-    }
-
-    private _leadClick(e) {
-        this.dispatchEvent(new CustomEvent('leadingIconClick', {
-            detail: 'message',
-            composed: true,
-            bubbles: true
-        }));
     }
 }   
