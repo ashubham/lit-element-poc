@@ -52,6 +52,10 @@ export class LeftPanelComponent extends ConnectedComponent {
                 <div class="column-list"
                      @leadingIconClick=${this.filterOnColumn}
                      @dblclick=${this.addColumn}>
+                     <div a>
+                        <div b></div>
+                     </div>
+
                     ${this.filteredColumns.map(c => html`
                         <bk-label 
                             text=${c.name}

@@ -14,7 +14,13 @@
       "sourceMap": true,
       "outDir": "build/ts-out",
       "allowSyntheticDefaultImports": true,
-      "noImplicitAny": false
+      "noImplicitAny": false,
+      "plugins": [
+        {
+            "name": "ts-lit-plugin",
+            "strict": true
+        }
+    ]
     },
     "include": [
       "src/**/*.ts"
